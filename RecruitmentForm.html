@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fillable Form</title>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #0071bc, #66a3ff, #99ccff, #cce6ff);
+    }
+    .main-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 1000px;
+    }
+    .form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 20px; /* Rounded corners on both sides */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%; /* Adjust width as needed */
+    }
+    .form-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    input[type=text], input[type=email], select, textarea {
+        width: 100%;
+        padding: 15px 20px;
+        margin: 10px 0;
+        font-size: 18px;
+        box-sizing: border-box;
+    }
+    input[type=submit] {
+        background-color: #0071bc;
+        color: white;
+        padding: 15px 20px;
+        margin: 10px 0;
+        font-size: 18px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.1s ease-in-out;
+    }
+    input[type=submit]:active {
+        transform: translateY(2px);
+    }
+    label {
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    h2 {
+        text-align: center;
+        width: 100%;
+        font-size: 24px;
+        margin: 20px 0;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        border-radius: 10px;
+    }
+    .modal-content h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    .close-btn {
+        background-color: #0071bc;
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .checkbox-group label {
+        display: flex;
+        align-items: center;
+    }
+    .checkbox-group input[type=checkbox] {
+        margin-right: 10px;
+    }
+    .checkbox-group .space {
+        margin-bottom: 20px; /* Added space */
+    }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-left">
+            <div class="container">
+                <img src="https://www.scr911.org/sites/all/themes/aha_compass/logo.png" alt="Your Image">
+                <h2>Employment Interest Form</h2>
+            </div>
+
+            <form id="dataForm" action="https://script.google.com/macros/s/AKfycbzyd3qIkDQtm7A3QlI9Qq4az2UzOSw5vVsq6DCqGhZXdIyNOv9i3cC0S6DjOtHBCp2c/exec" method="post">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+
+                <label for="position">Position of Interest</label>
+                <select id="position" name="position" required>
+                    <option value="Dispatch">Dispatch</option>
+                    <option value="Administration">Administration</option>
+                    <option value="Systems">Systems</option>
+                    <option value="Internship">Internship</option>
+                </select>
+
+                <div class="checkbox-group">
+                    <h3>Primary Language:</h3>
+                    <label>
+                        <input type="checkbox" id="english" name="language" value="English">
+                        <span>English</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="spanish" name="language" value="Spanish">
+                        <span>Spanish</span>
+                    </label>
+                    <label class="space">
+                        <input type="checkbox" id="bilingual" name="language" value="Bilingual">
+                        <span>Bilingual</span>
+                    </label>
+                </div>
+
+                <label for="about">Tell us about yourself (optional):</label>
+                <textarea id="about" name="about" placeholder="Tell us about yourself"></textarea>
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <h2>Your Contact Information Has Been Submitted Successfully!</h2>
+        <button class="close-btn" onclick="closeModal()">OK</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('phone').addEventListener('input', function(event) {
+        var phone = event.target.value.replace(/\D/g, '');
+        if (phone.length >= 10) {
+            phone = phone.substring(0, 10);
+            phone = '(' + phone.substring(0, 3) + ')-' + phone.substring(3, 6) + '-' + phone.substring(6, 10);
+        }
+        event.target.value = phone;
+    });
+
+    document.getElementById('dataForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var form = event.target;
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: form.method,
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                form.reset();
+                showModal();
+            } else {
+                alert('Form submission failed.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Form submission failed.');
+        });
+    });
+
+    function showModal() {
+        var modal = document.getElementById("successModal");
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("successModal");
+        modal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>
